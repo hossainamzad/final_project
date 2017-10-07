@@ -5,16 +5,37 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
+const path = require('path');
+
+
 
 // initialize the app
 const app = express();
 require('dotenv').config();
 
+// use middlewares
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
+app.use(cookieParser());
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 // set up static and views
 app.use(express.static('public'));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// set which templating engine
+app.set('view engine', 'ejs');
+// set where the app should find the views
+app.set('views', path.join(__dirname, 'views'));
+
+
 // set the port, either from an environmental variable or manually
 const PORT = process.env.PORT || 3000;
 // tell the app where to serve
@@ -30,8 +51,8 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-const authRoutes = require('./routes/auth-routes');
-app.use('/auth', authRoutes);
+const authRouter = require('./routes/auth-routes');
+app.use('/auth', authRouter);
 const userRoutes = require('./routes/user-routes');
 app.use('/user', userRoutes);
 // get anything that hasn't already been matched
