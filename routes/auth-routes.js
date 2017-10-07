@@ -20,7 +20,8 @@ authRouter.get('/register', authHelpers.loginRedirect, (req, res) => {
 });
 
 authRouter.post('/register', (req, res, next)  => {
-  authHelpers.createNewUser(req, res)
+  console.log(req.body)
+  authHelpers.createNewUser(req.body)
   .then((user) => {
     req.login(user, (err) => {
       if (err) return next(err);

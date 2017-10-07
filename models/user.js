@@ -7,13 +7,14 @@ User.findByUserName = userName => {
 };
 
 User.create = user => {
+  console.log('====>', user)
  return db.one(
     `
       INSERT INTO users
       (username, email, password_digest)
       VALUES ($1, $2, $3) RETURNING *
     `,
-    [user.username, user.email, user.password_digest]
+    [user.username, user.email, user.password]
   )
 };
 

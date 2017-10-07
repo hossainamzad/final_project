@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../../models/user');
 
-
 function comparePass(userPassword, databasePassword) {
   return bcrypt.compareSync(userPassword, databasePassword);
 }
@@ -12,14 +11,12 @@ function loginRedirect(req, res, next) {
   return next();
 }
 
-function createNewUser(req, res) {
+function createNewUser(user) {
   const salt = bcrypt.genSaltSync();
-  const hash = bcrypt.hashSync(req.body.password, salt);
+  const hash = bcrypt.hashSync(user.password, salt);
   return User.create({
-    username: req.body.username,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
+    username: user.username,
+    email: user.email,
     password: hash,
   });
 }
