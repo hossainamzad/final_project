@@ -1,8 +1,21 @@
 \c project_dev;
 
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS items;
+
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(255) UNIQUE NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
   password_digest TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS items (
+  id SERIAL PRIMARY KEY,
+  url TEXT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  expiration DATE NOT NULL,
+  price MONEY NOT NULL,
+  user_id INTEGER REFERENCES users
 );

@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 // set the port, either from an environmental variable or manually
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 // tell the app where to serve
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -54,6 +54,8 @@ const authRouter = require('./routes/auth-routes');
 app.use('/auth', authRouter);
 const userRoutes = require('./routes/user-routes');
 app.use('/user', userRoutes);
+const itemsRoutes = require('./routes/item-routes');
+app.use('/items', itemsRoutes);
 // get anything that hasn't already been matched
 app.use('*', (req, res) => {
     // send a response with status 404
