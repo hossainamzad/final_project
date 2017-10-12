@@ -7,6 +7,8 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const path = require('path');
+const cors = require('cors');
+
 
 
 // initialize the app
@@ -26,6 +28,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors())
 
 // set up static and views
 app.use(express.static('public'));
@@ -55,7 +58,7 @@ app.use('/auth', authRouter);
 const userRoutes = require('./routes/user-routes');
 app.use('/user', userRoutes);
 const itemsRoutes = require('./routes/item-routes');
-app.use('/items', itemsRoutes);
+app.use('/api', itemsRoutes);
 // get anything that hasn't already been matched
 app.use('*', (req, res) => {
     // send a response with status 404

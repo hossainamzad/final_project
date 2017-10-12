@@ -1,7 +1,7 @@
 const itemsModel = require('../models/item');
 const itemsController = {};
 itemsController.index = (req, res) => {
-  Item.findAll()
+  itemsModel.findAll()
     .then(items=> {
       res.json({
         message: "ok",
@@ -14,7 +14,7 @@ itemsController.index = (req, res) => {
     });
 };
 itemsController.show = (req, res) => {
-  Item.findById(req.params.id)
+  itemsModel.findById(req.params.id)
     .then(item => {
       res.json({
         message: "ok",
@@ -27,9 +27,8 @@ itemsController.show = (req, res) => {
 };
 
 itemsController.create = (req, res) => {
-  Item.create({
-    item: req.body.item
-  })
+  console.log("inside create: ", req.body)
+  itemsModel.create(req.body)
     .then(item => {
       res.json({ message: "ok", data: { item } });
     })
@@ -40,7 +39,7 @@ itemsController.create = (req, res) => {
 };
 
 itemsController.update = (req, res) => {
-  Item.update(req.body)
+  itemsModel.update(req.body)
     .then((record) => {
       res.json({ message: `items ${item} updated` });
       res.redirect('/user');
@@ -53,7 +52,7 @@ itemsController.update = (req, res) => {
   /*delete records*/
   itemsController.destroy = (req, res, next) => {
     console.log(res);
-    Item
+    itemsModel
       .destroy(res.params)
       .then(() => {
         console.log(res.params)

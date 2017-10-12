@@ -12,9 +12,9 @@ Item.findById = (id) => {
 };
 
 Item.create = (item) => {
-  return db.none(`
-    INSERT INTO items (id, url, name, description, expiration, price, user_id)
-    VALUES ($/id/, $/url/, $/name/, $/description/, $/expiration/, $/price/, $/user_id/)
+  return db.one(`
+    INSERT INTO items (url, name, description, expiration, price, user_id)
+    VALUES ($/url/, $/name/, $/description/, $/expiration/, $/price/, $/user_id/)
     RETURNING *
     `,
     item);
