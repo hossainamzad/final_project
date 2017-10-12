@@ -5,12 +5,6 @@ function comparePass(userPassword, databasePassword) {
   return bcrypt.compareSync(userPassword, databasePassword);
 }
 
-function loginRedirect(req, res, next) {
-  if (req.user) res.redirect('/user');
-
-  return next();
-}
-
 function createNewUser(user) {
   const salt = bcrypt.genSaltSync();
   const hash = bcrypt.hashSync(user.password, salt);
@@ -21,15 +15,7 @@ function createNewUser(user) {
   });
 }
 
-function loginRequired(req, res, next) {
-  if (!req.user) res.redirect('/auth/login');
-
-  return next();
-}
-
 module.exports = {
   comparePass,
-  loginRedirect,
-  loginRequired,
   createNewUser
 }

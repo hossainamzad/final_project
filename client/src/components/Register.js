@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Register extends Component {
   render() {
     return(
-      <form className="loginPage">
+      <form onSubmit={this.props.userRegistration} className="loginPage">
         <input
           className="Username"
           type="text"
@@ -11,18 +11,17 @@ class Register extends Component {
           onChange={this.props.handleUserNameInput} />
           <input
           className="Email"
-          type="text"
+          type="email"
           placeholder="Enter Email"
           onChange={this.props.handleEmailInput} />
         <input
           className="Password"
-          type="text"
+          type="password"
           placeholder="Choose a password"
           onChange={this.props.handlePasswordInput} />
         <button
           type="submit"
-          className="loginButton"
-          onChange={this.props.userRegistration} >
+          className="loginButton">
           Sign-up
         </button>
       </form>

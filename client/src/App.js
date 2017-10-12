@@ -13,6 +13,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
 import AddItem from './components/AddItem';
+import ShowItems from './components/ShowItems';
 
 class App extends Component {
   constructor(props){
@@ -24,8 +25,10 @@ class App extends Component {
         email: '',
         uploadedImage: null,
         imageUrl: "",
-        user: null,
-        database: [],
+        user: {}, // this object contains email and username
+        // database: [],
+        data: [],
+        isAuthenticated: false
         // item: {
         //   image: '',
         //   name: '',
@@ -37,19 +40,24 @@ class App extends Component {
   this.uploadFile = this.uploadFile.bind(this);// send this to Dropzone
   this.handleUserNameInput = this.handleUserNameInput.bind(this);// send this to Login
   this.handlePasswordInput = this.handlePasswordInput.bind(this);//send this to Login
+  this.handleEmailInput = this.handleEmailInput.bind(this);
   this.handleChange = this.handleChange.bind(this);
   this.callingDB = this.callingDB.bind(this);
   this.userRegistration= this.userRegistration.bind(this);
+  this.userLogin = this.userLogin.bind(this);
+  this.handleItemDelete = this.handleItemDelete.bind(this);
   }
 
 
-   componentDidMount(){
-     if (this.state.imageUrl) {
-      this.sendToTheDatabase(this.state.imageUrl);
-     }
-     //should call the database as soon as the page loads.
-     this.callingDB();
-   }
+  componentDidMount() {
+    axios("http://localhost:3001/api/items")
+    .then(res => {
+      console.log(res.data.data.items);
+      this.setState({
+        data: res.data.data.items
+      });
+    });
+  }
 
    uploadFile(e){
     e.preventDefault();
@@ -139,28 +147,51 @@ class App extends Component {
 
 userRegistration(e){
   e.preventDefault();
-  let userData={
+
+  let data ={
     username: this.state.username,
     email: this.state.email,
     password: this.state.password
   }
+
  axios({
-        url: 'http://localhost:3001/api/users',
-        method: 'POST',
-        data: userData
-        // headers: 'Access-Control-Allow-Origin'
+      url: 'http://localhost:3001/auth/register',
+      method: 'POST',
+      data
     }).then((res)=> {
-        console.log(res);
+        this.setState({ user: res.data.user, isAuthenticated: true })
     }).catch(err => {
       console.error(err)
       })
 }
+
+userLogin(e){
+  e.preventDefault();
+// define this to login users in the backend
+  let data ={
+    username: this.state.username,
+    password: this.state.password
+  }
+
+ axios({
+      url: 'http://localhost:3001/auth/login',
+      method: 'POST',
+      data
+    }).then((res)=> {
+      //console.log(res)
+        this.setState({ user: res.data.user, isAuthenticated: true })
+    }).catch(err => {
+      console.error(err)
+      })
+}
+
+
   handleUserNameInput(event) {
     event.preventDefault();
     this.setState({
       username: event.target.value
     });
-    console.log(event.target.value);
+    // console.log(event.target.value);
   }
 
   handlePasswordInput(event) {
@@ -168,7 +199,7 @@ userRegistration(e){
     this.setState({
       password: event.target.value
     });
-    console.log(event.target.value);
+    // console.log(event.target.value);
   }
 
   handleEmailInput(event) {
@@ -176,7 +207,21 @@ userRegistration(e){
     this.setState({
       email: event.target.value
     });
-    console.log(event.target.value);
+    // console.log(event.target.value);
+  }
+
+  handleItemDelete(event) {
+    console.log('del', event);
+    axios({
+      method: "delete",
+      url: `http://localhost:3001/api/items`,
+      data: event
+    })
+      .then(res => {
+        this.callingDB();
+        console.log("DELETE Request SENT");
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -185,7 +230,7 @@ userRegistration(e){
         <header className="App-header">
           <h1 className="App-title">FoodShare</h1>
           <p>A food sharing app to prevent the food wastage</p>
-          <Navbar />
+          <Navbar isAuthenticated={this.state.isAuthenticated} />
         </header>
         <AddItem
           uploadFile = {this.uploadFile}
@@ -193,26 +238,24 @@ userRegistration(e){
           handleChange = {this.handleChange}
           sendToTheDatabase = {this.sendToTheDatabase}
         />
+        {/* To show the items on the page */}
+        <ShowItems data={ this.state.data } />
         <Switch>
           <Route exact path="/login"
             render ={props=>(
               <Login
-                username={this.state.username}
-                password={this.state.password}
                 handleUserNameInput={this.handleUserNameInput}
                 handlePasswordInput={this.handlePasswordInput}
-                handleEmailInput={this.handleEmailInput}
+                userLogin={this.userLogin}
               />
             )}
           />{/* Login router ends here */}
           <Route exact path="/register"
             render ={props=>(
               <Register
-                username={this.state.username}
-                email={this.state.email}
-                password={this.state.password}
                 handleUserNameInput={this.handleUserNameInput}
                 handlePasswordInput={this.handlePasswordInput}
+                handleEmailInput={this.handleEmailInput}
                 userRegistration={this.userRegistration}
               />
             )}

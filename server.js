@@ -55,8 +55,6 @@ app.get('/', (req, res) => {
 
 const authRouter = require('./routes/auth-routes');
 app.use('/auth', authRouter);
-const userRoutes = require('./routes/user-routes');
-app.use('/user', userRoutes);
 const itemsRoutes = require('./routes/item-routes');
 app.use('/api', itemsRoutes);
 // get anything that hasn't already been matched

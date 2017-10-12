@@ -1,40 +1,44 @@
 const express = require('express');
 const authRouter = express.Router();
-const passport = require('../services/auth/local');
 const authHelpers = require('../services/auth/auth-helpers');
+const User = require('../models/user')
 
+authRouter.post('/login', (req, res, next) => {
+  console.log(req.body)
+  User.findByUserName(req.body.username)
+    .then(user => {
+      // console.log(user)
+      if(!user) { return res.status(401).json({ error: "Invalid credentials" }); }
 
-authRouter.get('/login', authHelpers.loginRedirect, (req, res) => {
-  res.render('auth/login');
-});
-
-authRouter.post('/login', passport.authenticate('local', {
-    successRedirect: '/user',
-    failureRedirect: '/auth/login',
-    failureFlash: true
-  })
-);
-
-authRouter.get('/register', authHelpers.loginRedirect, (req, res) => {
-  res.render('auth/register');
+      if(!authHelpers.comparePass(req.body.password, user.password_digest)) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      } else {
+        return res.status(200).json({
+          user: {
+            username: user.username,
+            email: user.email
+          }
+        })
+      }
+    })
+    .catch((err) => { res.status(500).json({ status: 'Error logging in' }); });
 });
 
 authRouter.post('/register', (req, res, next)  => {
   console.log(req.body)
   authHelpers.createNewUser(req.body)
-  .then((user) => {
-    req.login(user, (err) => {
-      if (err) return next(err);
-
-      res.redirect('/user');
-    });
+  .then(user => {
+    if(!user) res.status(401).json({ error: "Error while registering" });
+    if(user) {
+      res.status(200).json({
+          user: {
+            username: user.username,
+            email: user.email
+          }
+        })
+    }
   })
   .catch((err) => { res.status(500).json({ status: 'error' }); });
-});
-
-authRouter.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
 });
 
 module.exports = authRouter;
