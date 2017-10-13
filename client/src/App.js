@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch, Link, Redirect } from "react-router-dom";
 import './App.css';
 import Images from './components/Images';
 // import dropzone to drop images or files on the website.
@@ -119,7 +119,7 @@ class App extends Component {
       .then(res => {
         console.log(res);
         this.setState({
-          dataBase: res.data.data.items,
+          data: res.data.data.items,
         });
       })
       .catch(err => console.error(err));
@@ -232,12 +232,6 @@ userLogin(e){
           <p>A food sharing app to prevent the food wastage</p>
           <Navbar isAuthenticated={this.state.isAuthenticated} />
         </header>
-        <AddItem
-          uploadFile = {this.uploadFile}
-          uploadedImage = {this.state.uploadedImage}
-          handleChange = {this.handleChange}
-          sendToTheDatabase = {this.sendToTheDatabase}
-        />
         {/* To show the items on the page */}
         <ShowItems data={ this.state.data } />
         <Switch>
@@ -257,6 +251,16 @@ userLogin(e){
                 handlePasswordInput={this.handlePasswordInput}
                 handleEmailInput={this.handleEmailInput}
                 userRegistration={this.userRegistration}
+              />
+            )}
+          />{/* Register router ends here */}
+          <Route exact path="/additem"
+            render ={props=>(
+              <AddItem
+                uploadFile = {this.uploadFile}
+                uploadedImage = {this.state.uploadedImage}
+                handleChange = {this.handleChange}
+                sendToTheDatabase = {this.sendToTheDatabase}
               />
             )}
           />{/* Register router ends here */}

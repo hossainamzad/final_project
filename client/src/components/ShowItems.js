@@ -4,7 +4,7 @@ class ShowItems extends Component {
   render(){
     return(
       <div className="ShowItems">
-        <div className="items">
+        <div>
           { this.props.data.map( item => {
             {console.log(item)}
             return <OneItem item={item} key={item.id} />

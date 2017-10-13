@@ -14,11 +14,9 @@ class Login extends Component {
           type="password"
           placeholder="Enter your Password"
           onChange={this.props.handlePasswordInput} />
-        <button
+      <input
           type="submit"
-          className="loginButton">
-          Login
-        </button>
+          value="Log in" />
       </form>
       )
   }

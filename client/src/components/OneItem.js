@@ -9,14 +9,13 @@ class OneItem extends Component {
     console.log('Q rendering');
     return (
       <div className="items">
-        {this.props.item.name}
+          <div><img src={this.props.item.url} alt='Item pic' width="250"/>
           <div className="name">{this.props.item.name}</div>
-          <div><img src={this.props.item.url} alt='Item pic' />
-          <div className="name">{this.props.item.description}</div>
-          <div className="name">{this.props.item.expiration}</div>
-          <div className="name">{this.props.item.price}</div>
-          <div className="name">{this.props.item.user_id}</div>
+          <div className="description">{this.props.item.description}</div>
+          <div className="expiration">{this.props.item.expiration}</div>
+          <div className="price">{this.props.item.price}</div>
           </div>
+          <button onClick={this.props.handleItemDelete}>Delete</button>
       </div>
     )
   }

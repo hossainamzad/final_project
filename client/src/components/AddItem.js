@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 class AddItem extends Component{
   render(){
     return(
-      <div>AddItem Component
+      <div className="addItemContainer">AddItem Component
         <form onSubmit={this.props.uploadFile}>
           <input
             className="name"
@@ -18,10 +18,10 @@ class AddItem extends Component{
             type="text"
             placeholder="$value"/>
           <input type="file" onChange={this.props.handleChange} name="upload" />
-          <button type="submit"
+          <input type="submit" value="Submit"
               // onClick={this.props.sendToTheDatabase}
-            >Upload
-            </button>
+
+            />
 
         </form>
       </div>
