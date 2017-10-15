@@ -19,7 +19,7 @@ class AddItem extends Component{
 
           <input className="expiration"
             type="date"
-            placeholder="expiration date"
+            placeholder="expiration"
             name="expiration"
             onChange={this.props.handleTextChange}
             />
@@ -29,10 +29,12 @@ class AddItem extends Component{
             name="price"
             onChange={this.props.handleTextChange}
             />
-          <input type="file" onChange={this.props.handleChange} name="upload" />
+          <div class="control">
+            <input type="file" onChange={this.props.handleChange} name="upload" />
+          </div>
+
           <input type="submit" value="Submit"
               // onClick={this.props.sendToTheDatabase}
-
             />
 
         </form>

@@ -3,7 +3,7 @@ import OneItem from './OneItem';
 class ShowItems extends Component {
   render(){
     return(
-      <div className="ShowItems">
+      <div className="columns">
         <div>
           { this.props.data.map( item => {
             {console.log(item)}

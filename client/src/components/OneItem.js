@@ -17,9 +17,9 @@ class OneItem extends Component {
           <div className="expiration">{this.props.item.expiration}</div>
           <div className="price">{this.props.item.price}</div>
           </div>
-          <button onClick={() => this.props.handleItemUpdate(this.props.item.id)}>Update</button>
-          <button onClick={() => this.props.addToTheShoppingCart(this.props.item)}>Add This Item</button>
-          <button onClick={() => this.props.handleItemDelete(this.props.item.id)}>Delete</button>
+          <div className="button" onClick={() => this.props.handleItemUpdate(this.props.item)}>Update</div>
+          <div className="button" onClick={() => this.props.addToTheShoppingCart(this.props.item)}>Add This Item</div>
+          <div className="button" onClick={() => this.props.handleItemDelete(this.props.item.id)}>Delete</div>
       </div>
     )
   }

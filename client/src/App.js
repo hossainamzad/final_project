@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link, Redirect } from "react-router-dom";
 import './App.css';
+import 'bulma/css/bulma.css';
 import Images from './components/Images';
 // import dropzone to drop images or files on the website.
 import Dropzone from 'react-dropzone';
@@ -15,6 +16,8 @@ import Register from './components/Register';
 import AddItem from './components/AddItem';
 import ShowItems from './components/ShowItems';
 import ShoppingCart from './components/ShoppingCart';
+import Footer from './components/Footer';
+import UpdateItem from './components/UpdateItem';
 
 class App extends Component {
   constructor(props){
@@ -57,8 +60,11 @@ class App extends Component {
   this.logOut = this.logOut.bind(this);
   this.handleTextChange=this.handleTextChange.bind(this)
   this.addToTheShoppingCart=this.addToTheShoppingCart.bind(this)
+  this.handleItemUpdate = this.handleItemUpdate.bind(this);
   }
 
+  // componentWillMount(){
+  // }
 
   componentDidMount() {
       axios("http://localhost:3001/api/items")
@@ -262,10 +268,10 @@ userLogin(e){
 
   handleItemUpdate(id) {
     console.log(id);
-    let intId = parseInt(id);
+    // let intId = parseInt(id);
     axios({
       method: "PUT",
-      url: `http://localhost:3001/api/items/${intId}`,
+      url: `http://localhost:3001/api/items/${id}`,
 
     })
       .then(res => {
@@ -293,9 +299,9 @@ userLogin(e){
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">FoodShare</h1>
-          <p>A food sharing app to prevent the food wastage</p>
           <Navbar isAuthenticated={this.state.isAuthenticated} />
+          <h1 className="App-title">Echolalia</h1>
+          <p>A food sharing app to prevent the food wastage</p>
         </header>
         {/* To show the items on the page */}
         <ShowItems
@@ -304,13 +310,7 @@ userLogin(e){
           handleItemUpdate = {this.handleItemUpdate}
           addToTheShoppingCart={this.addToTheShoppingCart}
           />
-        <Route exact path="/cart"
-          component={props =>
-            <ShoppingCart
-              shoppingCart={this.state.shoppingCart} {...props}
-              />
-            }
-          />
+
         <Switch>
           <Route exact path="/login"
             render ={props=>(
@@ -342,7 +342,27 @@ userLogin(e){
               />
             )}
           />{/* Register router ends here */}
+          <Route exact path="/cart"
+          component={props =>
+            <ShoppingCart
+              shoppingCart={this.state.shoppingCart} {...props}
+              />
+            }
+          />{/* ShoppinCart router ends here */}
+
+          <Route exact path="/update"
+            component={props =>
+              <UpdateItem
+                handleItemUpdate = {this.handleItemUpdate}
+                handleTextChange = {this.handleTextChange}
+                />
+              }
+          />{/* UpdateItem router ends here */}
+
         </Switch>
+        <footer>
+          <Footer />
+        </footer>
       </div>
     );
   }

@@ -9,7 +9,7 @@
 }
 
 .App-header {
-  background-color: RGBA(255, 140, 124, 1.00);
+  background-color: RGBA(184, 154, 195, 1.00);
   height: 150px;
   padding: 20px;
   color: white;
@@ -27,7 +27,6 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
 .reg {
   display: flex;
   justify-content: space-between;
@@ -36,15 +35,29 @@
 
 }
 a .login,
-a .sign {
+a .sign,
+a.home {
   cursor: pointer;
   color: white;
+  text-decoration: none;
+  font-family: Proxima-Nova,sans-serif;
+}
+a.hover{
+  color: pink;
 }
 .sign {
   margin: 0px 5px 0px 0px;
 }
 /*this styling is for Registration form*/
 .loginPage{
+  width: 500px;
+  border: 1px solid black;
+  /*display: flex;*/
+  padding: 3px;
+  margin: 0 auto;
+  position: relative;
+}
+.addItemContainer{
   width: 500px;
   border: 1px solid black;
   /*display: flex;*/
@@ -129,17 +142,12 @@ form input[type=submit], input[type=reset] {
 .items{
   display: inline-block;
   margin: 2em;
-  border: 1px solid blue;
 }
-.addItemContainer{
+
+input[type="file"]{
   display: block;
-  width: 50%;
-  margin: 0 auto;
-}
-input[type="file" i]{
-  display: block;
-  margin: 2em auto;
-  padding: 2em ;
+  margin: 1em auto;
+  padding: 1em ;
   font-size: 1em;
 }
 
@@ -151,4 +159,24 @@ input[type="file" i]{
 .description, .expiration, .price {
   font-size: 1.4em;
   padding: .2em;
+}
+footer{
+  background-color: black;
+  color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+/*styling for the items*/
+.name{
+  color: RGBA(25, 14, 10, 1.00);
+}
+.description{
+  color: RGBA(103, 98, 152, 1.00);
+  /*font-weight: bold;*/
+}
+.expiration{
+  color: RGBA(141, 79, 142, 1.00);
+}
+.price{
+  color: RGBA(250, 60, 209, 1.00);
 }
