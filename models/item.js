@@ -35,6 +35,6 @@ Item.update = (item, id) => {
 
 Item.destroy = (id) => {
     return db.none(`
-    DELETE FROM items WHERE id = $/id/`, id);
+    DELETE FROM items WHERE id = $1`, id);
 };
 module.exports = Item;

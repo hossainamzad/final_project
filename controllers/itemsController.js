@@ -51,15 +51,13 @@ itemsController.update = (req, res) => {
 
   /*delete records*/
   itemsController.destroy = (req, res, next) => {
-    console.log(res);
+    //console.log();
     itemsModel
-      .destroy(res.params)
-      .then(() => {
-        console.log(res.params)
-        next();
-      })
+      .destroy(req.params.id)
       .catch((err) => {
         console.log(err);
       });
+
+      itemsModel.findAll().then(res => res.json(res)).catch(err => console.error(err));
   };
 module.exports = itemsController;

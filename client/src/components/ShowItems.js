@@ -7,7 +7,10 @@ class ShowItems extends Component {
         <div>
           { this.props.data.map( item => {
             {console.log(item)}
-            return <OneItem item={item} key={item.id} />
+            return <OneItem handleItemDelete = {this.props.handleItemDelete}
+                            handleItemUpdate = {this.props.handleItemUpdate}
+                            addToTheShoppingCart = {this.props.addToTheShoppingCart}
+                            item={item} key={item.id} />
           })}
         </div>
       </div>

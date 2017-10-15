@@ -14,6 +14,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AddItem from './components/AddItem';
 import ShowItems from './components/ShowItems';
+import ShoppingCart from './components/ShoppingCart';
 
 class App extends Component {
   constructor(props){
@@ -28,7 +29,14 @@ class App extends Component {
         user: {}, // this object contains email and username
         // database: [],
         data: [],
-        isAuthenticated: false
+        isAuthenticated: false,
+        image: '',
+        description: '',
+        expiration: '',
+        price: '',
+        itemName: '',
+        shoppingCart: []
+
         // item: {
         //   image: '',
         //   name: '',
@@ -46,17 +54,29 @@ class App extends Component {
   this.userRegistration= this.userRegistration.bind(this);
   this.userLogin = this.userLogin.bind(this);
   this.handleItemDelete = this.handleItemDelete.bind(this);
+  this.logOut = this.logOut.bind(this);
+  this.handleTextChange=this.handleTextChange.bind(this)
+  this.addToTheShoppingCart=this.addToTheShoppingCart.bind(this)
   }
 
 
   componentDidMount() {
-    axios("http://localhost:3001/api/items")
-    .then(res => {
-      console.log(res.data.data.items);
-      this.setState({
-        data: res.data.data.items
+      axios("http://localhost:3001/api/items")
+      .then(res => {
+        console.log(res.data.data.items);
+        this.setState({
+          data: res.data.data.items
+        });
+        console.log
       });
+  }
+
+  addToTheShoppingCart(item){
+    console.log("this is calling addToTheShoppingCart")
+    this.setState((prevState) => {
+      return {shoppingCart: prevState.shoppingCart.concat(item)};
     });
+    console.log(this.state.shoppingCart)
   }
 
    uploadFile(e){
@@ -88,15 +108,17 @@ class App extends Component {
 
   sendToTheDatabase(link){
   console.log("inside sendtodatabase", link);
+
   // const url = 'http://localhost:3001/api/items';
   let data = {
     url: link,
-    name: 'curry',
-    description: 'home made',
-    expiration: new Date(),
-    price: 4.50,
-    user_id:12
+    name: this.state.itemName,
+    description: this.state.description,
+    expiration: this.state.expiration,
+    price: this.state.price,
+    user_id: this.state.user.user_id
   }
+  console.log(data)
     axios({
         url: 'http://localhost:3001/api/items',
         method: 'POST',
@@ -104,6 +126,9 @@ class App extends Component {
         // headers: 'Access-Control-Allow-Origin'
     }).then((res)=> {
         console.log(res);
+      this.setState((prevState) => {
+        return {data: prevState.data.concat(res.data.data.item)};
+      });
     }).catch(err => {
       console.log("we got an error")
       console.error(err)
@@ -112,6 +137,7 @@ class App extends Component {
 
 
   callingDB() {
+    console.log("inside the coallingDB func")
     axios({
       method: "GET",
       url: `http://localhost:3001/api/items/`
@@ -178,7 +204,7 @@ userLogin(e){
       method: 'POST',
       data
     }).then((res)=> {
-      //console.log(res)
+      console.log(res)
         this.setState({ user: res.data.user, isAuthenticated: true })
     }).catch(err => {
       console.error(err)
@@ -210,18 +236,57 @@ userLogin(e){
     // console.log(event.target.value);
   }
 
-  handleItemDelete(event) {
-    console.log('del', event);
+  handleItemDelete(id) {
+    console.log(id);
+    // let data = {
+    //   url: link,
+    //   name: this.state.name,
+    //   description: this.state.description,
+    //   expiration: this.state.expiration,
+    //   price: this.state.price,
+    //   user_id: this.state.user.id
+    // }
+    let intId = parseInt(id);
     axios({
       method: "delete",
-      url: `http://localhost:3001/api/items`,
-      data: event
+      url: `http://localhost:3001/api/items/${intId}`,
+    }, window.location.reload())
+      .then(res => {
+        console.log("DELETE Request SENT");
+        this.setState((prevState) => {
+          return {data: prevState.data.concat({})};
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
+  handleItemUpdate(id) {
+    console.log(id);
+    let intId = parseInt(id);
+    axios({
+      method: "PUT",
+      url: `http://localhost:3001/api/items/${intId}`,
+
     })
       .then(res => {
         this.callingDB();
-        console.log("DELETE Request SENT");
+        console.log("UPDATE HAPPENING");
+        this.setState((prevState) => {
+          return {data: prevState.data};
+        });
+        console.log(this.state.data)
       })
       .catch(err => console.log(err));
+  }
+
+  logOut(){
+    this.setState({ user: null, isAuthenticated: false });
+  }
+
+  handleTextChange(event){
+    this.setState({
+      [event.target.name] :event.target.value
+    })
   }
 
   render() {
@@ -233,7 +298,19 @@ userLogin(e){
           <Navbar isAuthenticated={this.state.isAuthenticated} />
         </header>
         {/* To show the items on the page */}
-        <ShowItems data={ this.state.data } />
+        <ShowItems
+          data={ this.state.data }
+          handleItemDelete = {this.handleItemDelete}
+          handleItemUpdate = {this.handleItemUpdate}
+          addToTheShoppingCart={this.addToTheShoppingCart}
+          />
+        <Route exact path="/cart"
+          component={props =>
+            <ShoppingCart
+              shoppingCart={this.state.shoppingCart} {...props}
+              />
+            }
+          />
         <Switch>
           <Route exact path="/login"
             render ={props=>(
@@ -261,6 +338,7 @@ userLogin(e){
                 uploadedImage = {this.state.uploadedImage}
                 handleChange = {this.handleChange}
                 sendToTheDatabase = {this.sendToTheDatabase}
+                handleTextChange={this.handleTextChange}
               />
             )}
           />{/* Register router ends here */}

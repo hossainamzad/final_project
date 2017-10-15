@@ -16,7 +16,8 @@ authRouter.post('/login', (req, res, next) => {
         return res.status(200).json({
           user: {
             username: user.username,
-            email: user.email
+            email: user.email,
+            user_id: user.id
           }
         })
       }
@@ -33,7 +34,8 @@ authRouter.post('/register', (req, res, next)  => {
       res.status(200).json({
           user: {
             username: user.username,
-            email: user.email
+            email: user.email,
+            user_id: user.id
           }
         })
     }
