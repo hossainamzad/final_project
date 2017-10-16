@@ -7,18 +7,18 @@ of the food, sale value or sharing it for free, your choice.
 
 Do not waste food. What you waste coule be a meal for the others.
 
-# Tech Stack
+## Tech Stack
     1) Node.js
     2) Express.js
     3) React.js
     4) PostgreSQL
 
-# I also used:
+## I also used:
     * Session and passport for user authentication
     * Axios for making api calls
     * React Router
     * Cloudinary API to upload images
-# Challenges
+## Challenges
     * Making frontend talk to the backend
     * Routing 
     * Rendering different components when needed for the app to function smoothly.
@@ -28,13 +28,13 @@ Do not waste food. What you waste coule be a meal for the others.
     * Setting up authentication.
     * Building fullstack application.
 
-# Wins     
+## Wins     
     * It's my first fullstack application. So I will always remember it.
     * React is coming clear.
     * Making API calls from the frontend
     * App is responsive
 
-# Post MVP:
+## Post MVP:
     - Will add a search bar so people can search for food by names
     - Mock-up payment options
     - Add another API to dispatch emails upon making transactions to both parties (buyers, sellers).
