@@ -61,10 +61,18 @@ class App extends Component {
   this.handleTextChange=this.handleTextChange.bind(this)
   this.addToTheShoppingCart=this.addToTheShoppingCart.bind(this)
   this.handleItemUpdate = this.handleItemUpdate.bind(this);
+  this.handleClearForm = this.handleClearForm.bind(this);
   }
 
   // componentWillMount(){
   // }
+  handleClearForm(e){
+    e.preventDefault();
+    this.setState({
+      username: '',
+      password: ''
+    })
+  }
 
   componentDidMount() {
       axios("http://localhost:3001/api/items")
@@ -215,6 +223,7 @@ userLogin(e){
     }).catch(err => {
       console.error(err)
       })
+    this.handleClearForm(e);
 }
 
 
@@ -267,11 +276,11 @@ userLogin(e){
   }
 
   handleItemUpdate(id) {
-    console.log(id);
+    console.log(id.id);
     // let intId = parseInt(id);
     axios({
       method: "PUT",
-      url: `http://localhost:3001/api/items/${id}`,
+      url: `http://localhost:3001/api/items/${id.id}`,
 
     })
       .then(res => {
@@ -280,6 +289,7 @@ userLogin(e){
         this.setState((prevState) => {
           return {data: prevState.data};
         });
+
         console.log(this.state.data)
       })
       .catch(err => console.log(err));
@@ -300,8 +310,8 @@ userLogin(e){
       <div className="App">
         <header className="App-header">
           <Navbar isAuthenticated={this.state.isAuthenticated} />
-          <h1 className="App-title">Echolalia</h1>
-          <p>A food sharing app to prevent the food wastage</p>
+          <h1 className="App-title">Food Sharing</h1>
+          <p className="subtitle">A food sharing app to prevent the food wastage</p>
         </header>
         {/* To show the items on the page */}
         <ShowItems
@@ -318,6 +328,7 @@ userLogin(e){
                 handleUserNameInput={this.handleUserNameInput}
                 handlePasswordInput={this.handlePasswordInput}
                 userLogin={this.userLogin}
+                handleClearForm={this.handleClearForm}
               />
             )}
           />{/* Login router ends here */}

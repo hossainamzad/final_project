@@ -17,7 +17,7 @@ const Footer = (props) => {
 
           </div>
           <div className="column">
-            <p className="title is-6" style={{color:"white"}}>Echolalia</p>
+            <p className="title is-6" style={{color:"white"}}>Food Sharing</p>
             <p className="title is-6" style={{color:"white"}}>10 East, 21 street, Manhattan</p>
             <p className="title is-6" style={{color:"white"}}>Monday-Friday</p>
             <p className="title is-6" style={{color:"white"}}>Pizza will be provided.</p>

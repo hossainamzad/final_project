@@ -29,7 +29,7 @@ class AddItem extends Component{
             name="price"
             onChange={this.props.handleTextChange}
             />
-          <div class="control">
+          <div className="control">
             <input type="file" onChange={this.props.handleChange} name="upload" />
           </div>
 

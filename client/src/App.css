@@ -10,15 +10,20 @@
 
 .App-header {
   background-color: RGBA(184, 154, 195, 1.00);
-  height: 150px;
+  height: 250px;
   padding: 20px;
   color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+  font-size: 2.5em;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
-
+.subtitle{
+  font-size: 1.5em;
+  padding-bottom: .2em;
+}
 .App-intro {
   font-size: large;
 }
