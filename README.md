@@ -8,10 +8,10 @@ of the food, sale value or sharing it for free, your choice.
 Do not waste food. What you waste coule be a meal for the others.
 
 # Tech Stack
-    * Node.js
-    * Express.js
-    * React.js
-    * PostgreSQL
+    1) Node.js
+    2) Express.js
+    3) React.js
+    4) PostgreSQL
 
 # I also used:
     * Session and passport for user authentication
