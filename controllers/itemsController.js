@@ -39,13 +39,13 @@ itemsController.create = (req, res) => {
 };
 
 itemsController.update = (req, res) => {
-  itemsModel.update(req.body)
+  console.log(req.body)
+  console.log(req.params.id)
+  itemsModel.update(req.body, req.params.id)
     .then((record) => {
-      res.json({ message: `items ${item} updated` });
-      res.redirect('/user');
+      res.json({ message: `Item ${record.name} updated` });
     }).catch((err) => {
-        console.log(err);
-        res.status(401).json({ message: 'something went wrong' });
+        res.status(401).json({ message: 'Something went wrong when updating' });
     });
 };
 

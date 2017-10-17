@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link, Redirect } from "react-router-dom";
+import { Route, Switch, Link, Redirect, withRouter } from "react-router-dom";
 import './App.css';
 import 'bulma/css/bulma.css';
 import Images from './components/Images';
@@ -38,7 +38,9 @@ class App extends Component {
         expiration: '',
         price: '',
         itemName: '',
-        shoppingCart: []
+        shoppingCart: [],
+        updatingThisItem: '',
+        isLoggedIn: false,
 
         // item: {
         //   image: '',
@@ -62,6 +64,8 @@ class App extends Component {
   this.addToTheShoppingCart=this.addToTheShoppingCart.bind(this)
   this.handleItemUpdate = this.handleItemUpdate.bind(this);
   this.handleClearForm = this.handleClearForm.bind(this);
+  this.itemToUpdate = this.itemToUpdate.bind(this);
+  this.logOut=this.logOut.bind(this);
   }
 
   // componentWillMount(){
@@ -75,7 +79,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-      axios("http://localhost:3001/api/items")
+      axios("http://localhost:4000/api/items")
       .then(res => {
         console.log(res.data.data.items);
         this.setState({
@@ -123,7 +127,7 @@ class App extends Component {
   sendToTheDatabase(link){
   console.log("inside sendtodatabase", link);
 
-  // const url = 'http://localhost:3001/api/items';
+  // const url = 'http://localhost:4000/api/items';
   let data = {
     url: link,
     name: this.state.itemName,
@@ -134,7 +138,7 @@ class App extends Component {
   }
   console.log(data)
     axios({
-        url: 'http://localhost:3001/api/items',
+        url: 'http://localhost:4000/api/items',
         method: 'POST',
         data: data
         // headers: 'Access-Control-Allow-Origin'
@@ -154,7 +158,7 @@ class App extends Component {
     console.log("inside the coallingDB func")
     axios({
       method: "GET",
-      url: `http://localhost:3001/api/items/`
+      url: `http://localhost:4000/api/items/`
     })
       .then(res => {
         console.log(res);
@@ -195,11 +199,12 @@ userRegistration(e){
   }
 
  axios({
-      url: 'http://localhost:3001/auth/register',
+      url: 'http://localhost:4000/auth/register',
       method: 'POST',
       data
     }).then((res)=> {
-        this.setState({ user: res.data.user, isAuthenticated: true })
+      this.props.history.push('/login')
+      this.setState({ user: res.data.user, isAuthenticated: true, isLoggedIn: true })
     }).catch(err => {
       console.error(err)
       })
@@ -214,7 +219,7 @@ userLogin(e){
   }
 
  axios({
-      url: 'http://localhost:3001/auth/login',
+      url: 'http://localhost:4000/auth/login',
       method: 'POST',
       data
     }).then((res)=> {
@@ -264,7 +269,7 @@ userLogin(e){
     let intId = parseInt(id);
     axios({
       method: "delete",
-      url: `http://localhost:3001/api/items/${intId}`,
+      url: `http://localhost:4000/api/items/${intId}`,
     }, window.location.reload())
       .then(res => {
         console.log("DELETE Request SENT");
@@ -275,27 +280,37 @@ userLogin(e){
       .catch(err => console.log(err));
   }
 
-  handleItemUpdate(id) {
-    console.log(id.id);
-    // let intId = parseInt(id);
+  handleItemUpdate(e) {
+    e.preventDefault();
+    console.log('handleItemUpdate')
+
+    let itemID = parseInt(this.state.updatingThisItem, 10);
+    let data = {
+      url: 'http://www.google.com',
+      name: this.state.itemName,
+      description: this.state.description,
+      expiration: this.state.expiration,
+      price: this.state.price
+    }
+
     axios({
       method: "PUT",
-      url: `http://localhost:3001/api/items/${id.id}`,
-
+      url: `http://localhost:4000/api/items/${itemID}`,
+      data
     })
       .then(res => {
-        this.callingDB();
+        //this.callingDB();
         console.log("UPDATE HAPPENING");
-        this.setState((prevState) => {
-          return {data: prevState.data};
-        });
-
-        console.log(this.state.data)
+        // this.setState((prevState) => {
+        //   return {data: prevState.data};
+        // });
+        console.log(res)
       })
       .catch(err => console.log(err));
   }
 
   logOut(){
+    console.log("logging out")
     this.setState({ user: null, isAuthenticated: false });
   }
 
@@ -305,20 +320,34 @@ userLogin(e){
     })
   }
 
+  itemToUpdate(id){
+    this.setState({
+      updatingThisItem: id
+    })
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <Navbar isAuthenticated={this.state.isAuthenticated} />
-          <h1 className="App-title">Food Sharing</h1>
+          <h1 className="App-title">Food Shack</h1>
           <p className="subtitle">A food sharing app to prevent the food wastage</p>
         </header>
         {/* To show the items on the page */}
         <ShowItems
           data={ this.state.data }
           handleItemDelete = {this.handleItemDelete}
-          handleItemUpdate = {this.handleItemUpdate}
           addToTheShoppingCart={this.addToTheShoppingCart}
+          itemToUpdate={this.itemToUpdate}
+
+          handleItemUpdate={this.handleItemUpdate}
+          handleTextChange={this.handleTextChange}
+          handleChange={this.handleChange}
+          itemName={this.state.itemName}
+          description={this.state.description}
+          expiration={this.state.expiration}
+          logOut={this.logOut}
           />
 
         <Switch>
@@ -329,19 +358,20 @@ userLogin(e){
                 handlePasswordInput={this.handlePasswordInput}
                 userLogin={this.userLogin}
                 handleClearForm={this.handleClearForm}
+                {...props}
               />
             )}
           />{/* Login router ends here */}
           <Route exact path="/register"
-            render ={props=>(
+            render={props =>
               <Register
                 handleUserNameInput={this.handleUserNameInput}
                 handlePasswordInput={this.handlePasswordInput}
                 handleEmailInput={this.handleEmailInput}
                 userRegistration={this.userRegistration}
-              />
-            )}
+              />}
           />{/* Register router ends here */}
+
           <Route exact path="/additem"
             render ={props=>(
               <AddItem
@@ -350,6 +380,7 @@ userLogin(e){
                 handleChange = {this.handleChange}
                 sendToTheDatabase = {this.sendToTheDatabase}
                 handleTextChange={this.handleTextChange}
+                {...props}
               />
             )}
           />{/* Register router ends here */}
@@ -361,15 +392,6 @@ userLogin(e){
             }
           />{/* ShoppinCart router ends here */}
 
-          <Route exact path="/update"
-            component={props =>
-              <UpdateItem
-                handleItemUpdate = {this.handleItemUpdate}
-                handleTextChange = {this.handleTextChange}
-                />
-              }
-          />{/* UpdateItem router ends here */}
-
         </Switch>
         <footer>
           <Footer />
@@ -379,6 +401,6 @@ userLogin(e){
   }
 }
 
-export default App;
+export default withRouter(App);
 
 // this.state.user.id || add this line later

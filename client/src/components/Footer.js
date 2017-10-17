@@ -20,9 +20,6 @@ const Footer = (props) => {
             <p className="title is-6" style={{color:"white"}}>Food Sharing</p>
             <p className="title is-6" style={{color:"white"}}>10 East, 21 street, Manhattan</p>
             <p className="title is-6" style={{color:"white"}}>Monday-Friday</p>
-            <p className="title is-6" style={{color:"white"}}>Pizza will be provided.</p>
-
-
           </div>
           <div className="column">
             <h2 className="title is-6" style={{color:"white"}}>Facebook</h2>

@@ -39,7 +39,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 // set the port, either from an environmental variable or manually
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4000;
 // tell the app where to serve
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

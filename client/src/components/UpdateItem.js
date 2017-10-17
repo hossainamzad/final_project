@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
 class UpdateItem extends Component{
+  // constructor(){
+  //   this.state = {
+  //     itemName: ''
+  //   }
+  // }
+
+  // handleTextChange(e){
+  //   this.setState({
+  //     [e.target.name]: e.target.value
+  //   })
+  // }
+
   render(){
     return(
       <div className="addItemContainer">UpdateItem Component
@@ -9,27 +21,31 @@ class UpdateItem extends Component{
             type="text"
             placeholder="Enter the food's name"
             name="itemName"
+            value={this.props.itemName}
             onChange={this.props.handleTextChange} />
-          <input className="description"
+          <input
+            className="description"
             type="text"
             placeholder="description of the food"
             name="description"
-            onChange={this.props.handleTextChange}/>
-          <input className="expiration"
+            value={this.props.description}
+            onChange={this.props.handleTextChange} />
+          <input
+            className="expiration"
             type="text"
             placeholder="expiration date"
-            name="expritation"
-            onChange={this.props.handleTextChange}/>
-          <input className="price"
+            name="expiration"
+            value={this.props.expiration}
+            onChange={this.props.handleTextChange} />
+          <input
+            className="price"
             type="text"
-            placeholder="$value"
-            namr="price"
-            onChange={this.props.handleTextChange}/>
-          <input type="file" onChange={this.props.handleChange} name="upload" />
-          <input type="submit" value="Submit"
-              // onClick={this.props.sendToTheDatabase}
-
-            />
+            placeholder="$"
+            name="price"
+            value={this.props.price}
+            onChange={this.props.handleTextChange} />
+          <input type="file" onChange={this.props.handleChange} name="uploadedImage" />
+          <input type="submit" value="Submit" />
 
         </form>
       </div>

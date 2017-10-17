@@ -33,10 +33,7 @@ class AddItem extends Component{
             <input type="file" onChange={this.props.handleChange} name="upload" />
           </div>
 
-          <input type="submit" value="Submit"
-              // onClick={this.props.sendToTheDatabase}
-            />
-
+          <input type="submit" value="Submit" />
         </form>
       </div>
     )

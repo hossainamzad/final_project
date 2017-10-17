@@ -20,7 +20,7 @@ Item.create = (item) => {
     item);
 };
 
-Item.update = (item, id) => {
+Item.update = (item, itemID) => {
   return db.one(`
     UPDATE items SET
     url = $1,
@@ -30,7 +30,7 @@ Item.update = (item, id) => {
     price = $5
     WHERE id = $6
     RETURNING *
-  `, [item.url, item.name, item.description, item.expiration, item.price, id]);
+  `, [item.url, item.name, item.description, item.expiration, item.price, itemID]);
 }
 
 Item.destroy = (id) => {
