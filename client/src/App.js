@@ -30,7 +30,6 @@ class App extends Component {
         uploadedImage: null,
         imageUrl: "",
         user: {}, // this object contains email and username
-        // database: [],
         data: [],
         isAuthenticated: false,
         image: '',
@@ -40,16 +39,9 @@ class App extends Component {
         itemName: '',
         shoppingCart: [],
         updatingThisItem: '',
-        isLoggedIn: false,
-
-        // item: {
-        //   image: '',
-        //   name: '',
-        //   description: '',
-        //   expiration: new Date(),
-        //   price: 4.50
-        // }
+        isLoggedIn: false
     }
+
   this.uploadFile = this.uploadFile.bind(this);// send this to Dropzone
   this.handleUserNameInput = this.handleUserNameInput.bind(this);// send this to Login
   this.handlePasswordInput = this.handlePasswordInput.bind(this);//send this to Login
@@ -127,7 +119,7 @@ class App extends Component {
   sendToTheDatabase(link){
   console.log("inside sendtodatabase", link);
 
-  // const url = 'http://localhost:4000/api/items';
+  const url = 'http://localhost:4000/api/items';
   let data = {
     url: link,
     name: this.state.itemName,
@@ -224,6 +216,7 @@ userLogin(e){
       data
     }).then((res)=> {
       console.log(res)
+      this.props.history.push("/showitems")
         this.setState({ user: res.data.user, isAuthenticated: true })
     }).catch(err => {
       console.error(err)
@@ -311,7 +304,11 @@ userLogin(e){
 
   logOut(){
     console.log("logging out")
-    this.setState({ user: null, isAuthenticated: false });
+    this.setState({
+      user: {},
+      isAuthenticated: false
+    });
+    this.props.history.push("/login")
   }
 
   handleTextChange(event){
@@ -327,28 +324,16 @@ userLogin(e){
   }
 
   render() {
+  console.log(this.props)
     return (
       <div className="App">
         <header className="App-header">
-          <Navbar isAuthenticated={this.state.isAuthenticated} />
+          <Navbar isAuthenticated={this.state.isAuthenticated} logOut={this.logOut}/>
           <h1 className="App-title">Food Shack</h1>
-          <p className="subtitle">A food sharing app to prevent the food wastage</p>
+          <p className="subtitle">A food sharing app to prevent food waste</p>
         </header>
         {/* To show the items on the page */}
-        <ShowItems
-          data={ this.state.data }
-          handleItemDelete = {this.handleItemDelete}
-          addToTheShoppingCart={this.addToTheShoppingCart}
-          itemToUpdate={this.itemToUpdate}
 
-          handleItemUpdate={this.handleItemUpdate}
-          handleTextChange={this.handleTextChange}
-          handleChange={this.handleChange}
-          itemName={this.state.itemName}
-          description={this.state.description}
-          expiration={this.state.expiration}
-          logOut={this.logOut}
-          />
 
         <Switch>
           <Route exact path="/login"
@@ -391,7 +376,22 @@ userLogin(e){
               />
             }
           />{/* ShoppinCart router ends here */}
+          <Route exact path="/showitems" component={props =>
+             <ShowItems
+            data={ this.state.data }
+            handleItemDelete = {this.handleItemDelete}
+            addToTheShoppingCart={this.addToTheShoppingCart}
+            itemToUpdate={this.itemToUpdate}
 
+            handleItemUpdate={this.handleItemUpdate}
+            handleTextChange={this.handleTextChange}
+            handleChange={this.handleChange}
+            itemName={this.state.itemName}
+            description={this.state.description}
+            expiration={this.state.expiration}
+            logOut={this.logOut} {...props}
+            />
+          }/>
         </Switch>
         <footer>
           <Footer />

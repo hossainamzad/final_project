@@ -6,11 +6,11 @@ class ShoppingCart extends Component{
   }
   render(){
     return (
-        <div>
+        <div className="cartItem">
           {this.props.addToTheShoppingCart}
           {this.props.shoppingCart.map((item, index) => {
               return <div key={item}>
-               {item.name}
+               <span>{item.name}</span>
                {item.price}
             </div>
           })}
@@ -19,6 +19,3 @@ class ShoppingCart extends Component{
   }
 }
 export default ShoppingCart;
-//     {this.props.shoppingCart.map(item => {
-            // return <OneItem item={item} key={item.id}/>
-          // })}

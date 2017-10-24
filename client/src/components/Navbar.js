@@ -22,6 +22,7 @@ class Navbar extends Component{
             <li><Link to='/'><div className="login" onClick={this.props.logOut}>LOG OUT</div></Link></li>
             <li><Link to="/additem"><div className="login">ADD ITEM</div></Link></li>
             <li><Link to="/cart"><div className="login">CART</div></Link></li>
+            <li><Link to="/showitems"><div className="sign">SHOW ITEMS</div></Link></li>
           </ul>
         </div>
       );
